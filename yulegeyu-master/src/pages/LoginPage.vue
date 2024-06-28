@@ -33,7 +33,7 @@
 
         <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
             <a-button 
-                :disabled="!(formState.username === 'ylgy' && formState.password === '123456' && formState.remember)"
+                :disabled="!(formState.username && formState.password && formState.remember)"
                 type="primary" html-type="submit">登录</a-button>
         </a-form-item>
     </a-form>
@@ -45,7 +45,8 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from 'vue';
 import { useRouter } from "vue-router";
-
+// import { message } from 'antd';
+import { message } from 'ant-design-vue';
 interface FormState {
   username: string;
   password: string;
@@ -56,14 +57,17 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const formState = reactive<FormState>({
-      username: 'ylgy',
-      password: '123456',
+      username: '',
+      password: '',
       remember: false,
     });
     
     const onFinish = () => {
-      console.log('Success:', formState);
-      router.push('/index');
+      if(formState.username.indexOf('ylgy') != -1 && formState.password.indexOf('123456') != -1){
+        router.push('/index');
+      }else{
+        message.error('账号或密码错误');
+      }
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -97,5 +101,14 @@ export default defineComponent({
     width: 90vw;
     overflow: hidden;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+}
+.ant-form{
+  width: 100%;
+}
+.ant-checkbox-wrapper .ant-btn{
+  margin: 0;
+  padding: 0;
 }
 </style>
