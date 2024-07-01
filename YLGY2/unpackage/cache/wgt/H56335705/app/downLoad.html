@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>下载 APK 安装包</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .container {
+            padding: 50px;
+        }
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+        .app-name {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        .version {
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+        .download-btn {
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="./imgs/216-logo.png" alt="应用 Logo" class="logo">
+        <div class="app-name">Y了个Y</div>
+        <div class="version">版本 v1.0.0</div>
+        <a href="./ylgy_v1.0.0.apk" class="download-btn" id="download-link">下载应用</a>
+    </div>
+
+    <script>
+        document.getElementById('download-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            var downloadUrl = this.href;
+            window.location.href = downloadUrl;
+        });
+    </script>
+</body>
+</html>
