@@ -1,9 +1,35 @@
 {
+	"easycom": {
+	    "^u-(.*)": "uview-plus/components/u-$1/u-$1.vue"
+	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path" : "pages/login/login",
+			"style" : 
+			{
+				"navigationBarTitleText" : "登录",
+				"titleNView": false
+			}
+		},
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "选择模式",
+				"titleNView": false
+			}
+		},
+		{
+			"path" : "pages/login/ysxy",
+			"style" : 
+			{
+				"titleNView": false
+			}
+		},
+		{
+			"path" : "pages/game/game",
+			"style" : 
+			{
+				"titleNView": false
 			}
 		}
 	],
