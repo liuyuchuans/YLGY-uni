@@ -70,20 +70,47 @@
 			<!-- 技能 -->
 			<view class="skill-board" v-show="gameStatus <= 1">
 				<view class="b_operation">
-					<!-- <u-button size="small" @click="doRevert">撤回</u-button> -->
-					<u-button size="small" @click="doRemove">移出</u-button>
-					<!-- <ad-rewarded-video
-						adpid="1507000689"
-						:loadnext="true" 
-						v-slot:default="{loading, error}"
-						> -->
-						<u-button size="small" @click="doShuffle">洗牌</u-button>
-					<!-- </ad-rewarded-video> -->
-					
-					<!-- <p></p> -->
-					<u-button size="small" @click="doBroke">破坏</u-button>
-					<u-button size="small" @click="doHolyLight">圣光</u-button>
-					<u-button size="small" @click="doSeeRandom">透视</u-button>
+					<u-button 
+						:disabled="isLoading"
+						:loading="isLoading"
+						size="small" 
+						@click="showAd('doRevert')">
+						撤回	
+					</u-button>
+					<u-button 
+						:disabled="isLoading" 
+						:loading="isLoading"
+						size="small" @click="showAd('doRemove')">
+						移出
+					</u-button>
+					<u-button
+						:disabled="isLoading"
+						:loading="isLoading"
+						size="small" 
+						@click="showAd('doShuffle')">
+						洗牌	
+					</u-button>
+					<u-button
+						:disabled="isLoading"
+						:loading="isLoading"
+						size="small" 
+						@click="showAd('doBroke')">
+						破坏	
+					</u-button>
+					<u-button
+						:disabled="isLoading"
+						:loading="isLoading"
+						size="small" 
+						@click="showAd('doHolyLight')">
+						圣光	
+					</u-button>
+					<u-button
+						:disabled="isLoading"
+						:loading="isLoading"
+						size="small" 
+						@click="showAd('doSeeRandom')">
+						透视	
+					</u-button>
 				</view>
 			</view>
 		</view>
@@ -91,11 +118,18 @@
 </template>
 
 <script setup>
+	
 	import useGame from "../../store/game";
 	import CGlobal from "../../component/global.vue";
 	import {
-	    onLoad
+	    onLoad,
+		onReady
 	  } from "@dcloudio/uni-app";
+	import { ref } from 'vue';
+	let isLoading = ref(true) 
+	let newData = {}
+	
+	
 	const {
 	  gameStatus,
 	  levelBlocksVal,
@@ -120,6 +154,60 @@
 	console.log(levelBoardStyle)
 	onLoad(()=>{
 		doStart()
+		loadGG(1541477146, 'doRemove') // 移除
+		loadGG(1933101088, 'doRevert') // 撤回
+		loadGG(1591167485, 'doShuffle') // 洗牌
+		loadGG(1122570270, 'doBroke') // 破坏
+		loadGG(1559408178, 'doHolyLight') // 圣光
+		loadGG(1156333477, 'doSeeRandom') // 透视
+		isLoading.value = false;
+	})
+	let funs = {
+		doRemove,
+		doRevert,
+		doShuffle,
+		doBroke,
+		doHolyLight,
+		doSeeRandom
+	}
+	
+	
+	function loadGG(adpid, key){
+		newData[key] = uni.createRewardedVideoAd({
+            adpid,
+			adUnitId: adpid
+        }) // 仅用于HBuilder基座调试 adpid: '1507000689'
+		newData[key].onLoad(() => {
+			isLoading.value = false;
+			// 当激励视频被关闭时，默认预载下一条数据，加载完成时仍然触发 `onLoad` 事件
+		})
+		newData[key].onError((err) => {
+			console.log('onError event', err)
+			uni.$u.toast(err.errMsg)
+		})
+		newData[key].onClose((res) => {
+			// 用户点击了【关闭广告】按钮
+			if (res && res.isEnded) {
+				uni.$u.toast('奖励发发成功！')
+				funs[key]()
+			} else {
+			   // 播放中途退出
+			   uni.$u.toast('无效广告！')
+			}
+		})
+	}
+	function showAd(key){
+		if(!isLoading.value){
+			newData[key].show().catch(err => {
+				uni.$u.toast(err)
+			})
+		}else{
+			uni.$u.toast('loading false')
+		}
+		
+	}
+	onReady(()=>{
+		
 	})
 	function pageBack(){
 		uni.navigateBack();
